@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='content/update.css') }}">
+
+    <title>Modificar Paciente</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Modificar Paciente</h1>
+
+        <form action="{{ url_for('pacientes.edit_contact', id=paciente.id) }}" method="post" class="patient-form">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ paciente.nombre }}" required>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" value="{{ paciente.apellido }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ paciente.email }}" required>
+
+            <!-- Campo de contraseña con botones creativos -->
+            <label for="clave">Clave:</label>
+            <div class="password-container">
+                <input type="password" id="clave" name="clave" value="{{ paciente.clave }}" required>
+                <div class="button-container">
+                    <button type="button" id="togglePassword" class="toggle-button">👁️ Mostrar</button>
+                    <div class="separator"></div>
+                    <button type="button" id="generatePassword" class="generate-button">🔄 Generar</button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Guardar cambios</button>
+        </form>
+
+        <!-- Script para alternar la visibilidad de la contraseña -->
+        <script>
+            const passwordInput = document.getElementById('clave');
+            const toggleButton = document.getElementById('togglePassword');
+            const generateButton = document.getElementById('generatePassword');
+
+            // Función para alternar la visibilidad de la contraseña
+            function togglePassword() {
+                passwordInput.type = (passwordInput.type === 'password') ? 'text' : 'password';
+                toggleButton.textContent = (passwordInput.type === 'password') ? '👁️ Mostrar' : '🔒 Ocultar';
+            }
+
+            // Función para generar una contraseña aleatoria
+            function generatePassword() {
+                // Implementa lógica de generación de contraseña (puedes personalizar según tus necesidades)
+                const newPassword = Math.random().toString(36).slice(2);
+                passwordInput.value = newPassword;
+            }
+
+            // Asignar las funciones a los eventos de clic en los botones
+            toggleButton.addEventListener('click', togglePassword);
+            generateButton.addEventListener('click', generatePassword);
+        </script>
+
+        <a href="{{ url_for('pacientes.ver_lista') }}" class="list-button view-list-button">
+            <span>Volver a la lista de pacientes</span>
+        </a>
+
+        <section id="notifications">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="notification {{ message[1] }}">{{ message[0] }}</div>
+                {% endfor %}
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>

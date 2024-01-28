@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pacientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='content/estilo.css') }}">
+</head>
+<body>
+    <div class="patient-list-container">
+        <h2>Lista de Pacientes</h2>
+
+        <table class="hero-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in registro %}
+                    <tr>
+                        <td>{{ paciente.nombre }}</td>
+                        <td>{{ paciente.apellido }}</td>
+                        <td>{{ paciente.email }}</td>
+                        <td>
+                            <a href="{{ url_for('pacientes.edit_contact', id=paciente.id) }}" class="action-button edit-button">Modificar</a>
+                            <form action="{{ url_for('pacientes.delete_contact', id=paciente.id) }}" method="post" class="delete-form">
+                                <button type="submit" class="action-button delete-button" onclick="return confirm('¿Estás seguro de eliminar este paciente?')">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('pacientes.home') }}" class="back-link">Volver al Inicio</a>
+    </div>
+
+    <section id="notifications">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notification {{ message[1] }}">{{ message[0] }}</div>
+            {% endfor %}
+        {% endif %}
+    </section>
+</body>
+</html>

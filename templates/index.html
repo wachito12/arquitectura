@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Pacientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='content/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registrar Paciente</h1>
+    </header>
+
+    <main class="container">
+        <!-- Formulario -->
+        <form action="{{ url_for('pacientes.add_contact') }}" method="post">
+            <label for="nombre">Nombre paciente:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="apellido">Apellido paciente:</label>
+            <input type="text" id="apellido" name="apellido" required>
+        
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+        
+            <label for="clave">Clave:</label>
+            <input type="password" id="clave" name="clave" required>
+        
+            <button type="submit" class="button">Crear</button>
+        </form>
+        
+
+        <!-- Mensaje de éxito -->
+        {% if success_message %}
+            <div class="notification success">{{ success_message }}</div>
+        {% endif %}
+
+        <!-- Mueve el botón "Ver Lista de Pacientes" abajo del formulario y aplica estilos -->
+        <a href="{{ url_for('pacientes.ver_lista') }}" class="list-button view-list-button">
+            <span>Ver Lista</span>
+        </a>
+    </main>
+
+    <section id="notifications">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notification {{ message[1] }}">{{ message[0] }}</div>
+            {% endfor %}
+        {% endif %}
+    </section>
+
+    <section id="patient-list">
+        {% for paciente in registro %}
+            <div>
+                <h4>Nombre: {{ paciente.nombre }}</h4>
+                <h4>Apellido: {{ paciente.apellido }}</h4>
+                <h4>Email: {{ paciente.email }}</h4>
+
+                <div class="buttons">
+                    <a href="{{ url_for('pacientes.edit_contact', id=paciente.id) }}" class="button">Modificar</a>
+                    <form action="{{ url_for('pacientes.delete_contact', id=paciente.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="button" onclick="return confirm('¿Estás seguro de eliminar este paciente?')">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+</body>
+</html>
